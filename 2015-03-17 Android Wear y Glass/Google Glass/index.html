@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="remark,remarkjs,markdown,slideshow,presentation" />
+    <meta name="description" content="A simple, in-browser, markdown-driven slideshow tool." />
+    <link rel="stylesheet" type="text/css" href="remark.css">
+    <title>Remark</title>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse
+#Programando las Google Glass
+[El Weareable siempre visible]
+---
+class: middle
+En Google IO del 2012, cuando aún había señales de _relojes listos_ ni nada de eso, el buscador presentó sus _Google Glass_, y desde entonces
+somos muchos los **frikis** que las hemos querido, sin embargo, es un dispositivo **difícil de conseguir** ya que no está a la venta de forma
+pública. 
+
+Esto para la mayoría de los mortales no suponía un trauma:
+---
+
+class: middle
+.center[![Redes Sociales](imgs/eurocopa.jpg)]
+
+---
+
+class: middle
+Finalmente, a mediados de Abril 2013 salieron los primeros _explorers_ en Estados Unidos y poco a poco más gente ha podido adquirir el dispositivo
+poder hacer lo que siempre han querido
+
+---
+
+.center[![It's over 9000](imgs/over9000.jpg)]
+
+---
+
+class: center, middle, inverse
+## ¿Y como se programa el «juguete caro»?
+---
+class: center, middle
+
+# Tarjetas, tarjetas, más tarjetas y algún paginador para las tarjetas...
+
+---
+class: middle
+Para programar las _Glass_ disponemos de dos APIS **muy diferentes**, por un lado tenemos _Mirror_, que fue la primera en salir, y por otro la _GDK_, la cual salió
+unos meses después y será en la que nos centraremos.
+
+---
+class: center, middle, inverse
+# Mirror
+[Insertando notificaciones en nuestro TimeLine]
+
+---
+
+La API _Mirror_ es una **API Web**, la cual nos permite crear _servicios webs_ con el cual podremos enviar información a directamente a las Glass. Su funcionamiento
+es realtivamente sencillo. Nuestro servicio web debía comunicarse con los servidores de Google, pedir persimo para acceder a nuesta cuenta y ya podría enviar «notificaciones» a nuestras gafas.
+
+Esta API está bastante limitada y solo nos ofrece un sistema para mostrar información, pero nos permite crear rápidamente una App sencilla que supla algunas necesidades, 
+como puede ser mostrar la cartelera de un cine.
+
+---
+class: center, middle, inverse
+# GDK
+[La _API Real_ de las Google Glass]
+---
+
+Las _Glass_ disponen de un Android 4.4 en su interior, y con él, toda la API de Android que ya conocemos. Tanto a nivel de _core_ (servicios, bases de datos, ContentProviders...) como a nivel interfaz gráfico, sin embargo, dado el «diseño» de las _Glass_ y la **ausencia de pantalĺa táctil**, estos elementos no suelen acomodarse del todo.
+
+Por ello, surge un _paquete adicional_ denominado **Glass Development Kit**, un nombre muy épico para un par de bibliotecas que podrían incluirse en el _Support Library_ sin problema.
+
+
+
+    </textarea>
+    <script src="remark.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      var hljs = remark.highlighter.engine;
+    </script>
+    <script src="remark.language.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+          highlightStyle: 'monokai',
+          highlightLanguage: 'remark'
+        }) ;
+    </script>
+  </body>
+</html>
