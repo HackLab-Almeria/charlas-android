@@ -44,6 +44,9 @@ class: center, middle
 
 # Tarjetas, tarjetas, más tarjetas y algún paginador para las tarjetas...
 
+class: center, middle, inverse
+## ¿Y esas tarjetas las hago...?
+
 ---
 class: middle
 Para programar las _Glass_ disponemos de dos APIS **muy diferentes**, por un lado tenemos _Mirror_, que fue la primera en salir, y por otro la _GDK_, la cual salió
@@ -55,7 +58,7 @@ class: center, middle, inverse
 [Insertando notificaciones en nuestro TimeLine]
 
 ---
-
+class: middle
 La API _Mirror_ es una **API Web**, la cual nos permite crear _servicios webs_ con el cual podremos enviar información a directamente a las Glass. Su funcionamiento
 es realtivamente sencillo. Nuestro servicio web debía comunicarse con los servidores de Google, pedir persimo para acceder a nuesta cuenta y ya podría enviar «notificaciones» a nuestras gafas.
 
@@ -67,10 +70,79 @@ class: center, middle, inverse
 # GDK
 [La _API Real_ de las Google Glass]
 ---
-
+class: middle
 Las _Glass_ disponen de un Android 4.4 en su interior, y con él, toda la API de Android que ya conocemos. Tanto a nivel de _core_ (servicios, bases de datos, ContentProviders...) como a nivel interfaz gráfico, sin embargo, dado el «diseño» de las _Glass_ y la **ausencia de pantalĺa táctil**, estos elementos no suelen acomodarse del todo.
 
 Por ello, surge un _paquete adicional_ denominado **Glass Development Kit**, un nombre muy épico para un par de bibliotecas que podrían incluirse en el _Support Library_ sin problema.
+
+Principalmente, esta nueva API incorpora una serie de clases para la generación de las _Cards_ de forma rápida y un control de gestos.
+
+---
+class: center, middle, inverse
+# ¿Cómo es una App para Glass?
+[Organización y tipo de tarjetas]
+
+---
+
+class: middle
+.center[![Cards](imgs/organizacion1.png)]
+
+---
+class: middle
+# Tipos de Tarjetas
+En _Google Glass_ podemos distinguir dos tipos de aplicaciones, las **Live Card** y las **Inmersion**.
+---
+
+class: middle
+# Live Cards
+Las Live Cards son aquellas que quedan en nuestro Time Line, siendo una versión vitaminada de las notificaciones de Android.
+
+Un ejemplo claro de son las tarjetas de _Google Now_ o las de _GMail_. Elementos que nos aportan una información en un determinado momento a modo de aviso
+o que podremos consultar rápidamente con unos toques a la patilla.
+.center[
+  ![Live Cards](imgs/livecards.png)
+]
+---
+class: middle
+```java
+public class LiveCardService extends Service {
+    private static final String TAG = "LiveCardDemo";
+    private LiveCard mLiveCard;
+    private RemoteViews mLiveCardView;
+
+    public int onStartCommand(Intent intent, int flags, int startId) {
+            if (mLiveCard != null)
+               return START_STICKY;
+
+            mLiveCard = new LiveCard(this, TAG); //Creamos la LC
+            //Creamos el View asociado
+            mLiveCardView = new RemoteViews(getPackageName(), R.layout.main_layout);
+            //Le damos valores a los elementos
+            mLiveCardView.setTextViewText(R.id.saludo,  "Hola Peña");
+            mLiveCardView.setTextViewText(R.id.texto, "Android Mola"):
+            //Insertamos los Views
+            mLiveCard.setViews(mLiveCardView);
+            //Creamos un Intent para lanzar un menú
+            Intent menuIntent = new Intent(this, MenuActivity.class);
+            menuIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK 
+                              | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+            mLiveCard.setAction(PendingIntent.getActivity(this, 0, menuIntent, 0));
+            //Publicamos la tarjeta
+            mLiveCard.publish(PublishMode.REVEAL);
+
+            return START_STICKY;
+    }
+}
+
+```
+---
+
+
+class: middle
+# Inmersion Apps
+
+
 
 
 
