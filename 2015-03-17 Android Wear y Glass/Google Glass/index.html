@@ -36,13 +36,19 @@ poder hacer lo que siempre han querido
 .center[![It's over 9000](imgs/over9000.jpg)]
 
 ---
-
+class: center, middle, inverse
+## ¿Qué tiene las Glass?
+---
+class: center, middle
+.center[![Sensors](imgs/sensores.jpeg)]
+---
 class: center, middle, inverse
 ## ¿Y como se programa el «juguete caro»?
 ---
 class: center, middle
 
 # Tarjetas, tarjetas, más tarjetas y algún paginador para las tarjetas...
+---
 
 class: center, middle, inverse
 ## ¿Y esas tarjetas las hago...?
@@ -90,7 +96,7 @@ class: middle
 ---
 class: middle
 # Tipos de Tarjetas
-En _Google Glass_ podemos distinguir dos tipos de aplicaciones, las **Live Card** y las **Inmersion**.
+En _Google Glass_ podemos distinguir dos tipos de aplicaciones, las **Live Card** y las **Immersion**.
 ---
 
 class: middle
@@ -137,12 +143,128 @@ public class LiveCardService extends Service {
 
 ```
 ---
-
-
 class: middle
-# Inmersion Apps
+# Immersion Apps
+
+Las _Immersion_ son las aplicaciones activas. Básicamente son las aplicaciones tradicionales
+que estamos acostumbrados a utilizar en Android, con sus Activitys y demás... 
+
+Así mismo, una aplicacion _immersiva_ también podría tener una LiveCard enlazada.
+
+Principalmente, estas apps se basan en una o varias Activitys, dónde se muestran un paginador de Cards.
+
+---
+class: middle
+# Sí, los Fragments también funcionan
+
+Si «jomíos sí», también pueden usarse los Fragments, no es un problema... 
+Salvo los problemas propios de los Fragments. 
+
+Aunque funcionan, su uso suele ser poco frecuente dado que bastante complejo que un interfaz gráfica pueda utilizarse tanto en Android convencionales con pantalla táctilc como en Glass.
+
+---
+class: center, middle, inverse
+# Creando las Cards
+---
+class: middle
+.center[![Cards](imgs/cards.png)]
+
+Para crear las Cards se suele utilizar el CardBuilder, permitiendo obtener tarjetas _estándar_ de forma rápida y sencilla, aunque pueden generarse de forma convencional mediante un XML.
+---
+class: middle
+
+![Cards2](imgs/cards2.png)  
+
+```java
+View view1 = new CardBuilder(context, CardBuilder.Layout.COLUMNS)
+    .setText("This is the COLUMNS layout with dynamic text.")
+    .setFootnote("This is the footnote")
+    .setTimestamp("just now")
+    .addImage(R.drawable.image1)
+    .addImage(R.drawable.image2)
+    .addImage(R.drawable.image3)
+    .addImage(R.drawable.image4)
+    .addImage(R.drawable.image5)
+    .getView();
+```
+---
+![Cards3](imgs/card3.png) 
+```java
+View view2 = new CardBuilder(context, CardBuilder.Layout.CAPTION)
+    .setText("The caption layout with an icon.")
+    .setFootnote("This is the footnote")
+    .setTimestamp("just now")
+    .addImage(R.drawable.beach)
+    .setIcon(R.drawable.ic_avatar)
+    .setAttributionIcon(R.drawable.ic_smile)
+    .getView();
+ ```
+---
+![Cards4](imgs/card4.png)  
+
+```java
+View view = new CardBuilder(context, CardBuilder.Layout.TITLE)
+    .setText("TITLE Card")
+    .setIcon(R.drawable.ic_phone)
+    .addImage(R.drawable.beach)
+    .getView();
+ ```
+
+---
+![Cards5](imgs/card5.png) 
+
+```java
+View view = new CardBuilder(context, CardBuilder.Layout.EMBED_INSIDE)
+    .setEmbeddedLayout(R.layout.food_table)
+    .setFootnote("Foods you tracked")
+    .setTimestamp("today")
+    .getView();
+TextView textView1 = (TextView) view.findViewById(R.id.text_view_1);
+textView1.setText("Water");
+```
+
+---
+class: middle
+# CardScrollView
+
+Este elemento  nos permite crear _ViewPagers_ de _Cards_ para las Cards. Utiliza un _Adapters_ como el hemos usando durante años en los _ListViews_.
+
+El **CardBuilder** incopora ya un sistema de _ViewHolder_ interno lo cual nos permite ahorrar algunas líneas y mantener un código más limpio.
 
 
+
+---
+class: middle
+```java
+public class MyAdapter extends CardScrollAdapter {
+    private List<String> textos;
+    public MyAdapter(List<String> textos) {
+        this.textos = textos;
+    }
+    @Override
+    public int getCount() {
+        return textos.size();
+    }
+    @Override
+    public Object getItem(int i) {
+        return textos.get(i);
+    }
+    @Override
+    public View getView(int i, View view, ViewGroup viewGroup) {
+        CardBuilder builder = new CardBuilder(viewGroup.getContext(), CardBuilder.Layout.TEXT);
+        builder.setText(textos.get(i));
+        return builder.getView(view, viewGroup);
+    }
+    @Override
+    public int getPosition(Object o) {
+        return textos.indexOf(o);
+    }
+}
+```
+
+---
+class: middle
+.center[![Glass](imgs/glass1.jpg)]
 
 
 
