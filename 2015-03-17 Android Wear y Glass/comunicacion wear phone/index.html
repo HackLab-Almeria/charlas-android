@@ -43,30 +43,119 @@ class: middle, center
 _Data API_ es una de las 4 API que nos provee Google para interactuar con nuestro SmartWatch. En este caso se trata de un canal de comunicación con nuestro SmartPhone(o cualquier otro dispositivo conectado disponible).
 
 ---
-class: center, middle, inverse
-# Mirror
-[Insertando notificaciones en nuestro TimeLine]
+class: middle
+
+Este API nos permite comunicarnos con los siguientes Objetos:
+
+- **Data Item**: Permite guardar datos genéricos para ser almacenados el nuestro SmartPhone.
+- **Asset**: Se trata de un objeto que podemos guardar; como por ejemplo una imagen.
+- **Message**: Se trata de un mensaje que podemos utilizar para hacer Llamadas a procedimientos remotos.
+---
+class: middle, center
+
+## Vale, pero ¿Cómo me comunico con mi dispositivo?
+---
+class: center, middle
+
+### GCMS
+[Google Cloud Messages Services]
+---
+class: middle
+*Google Clod Messages Services* es una API que nos permite comunicarnos tanto con nuestros dispositivos, como con los Servicios de Google(Youtube, Maps, Calendar,etc...).
+---
+Gracias a esta API podemos comunicarnos con nuestro Dispositivo por medio de la Api especifica para ello la ```wearable.API```
+.center[![gms](imgs/gms.png)]
+---
+class: middle, center, inverse
+
+## Implementación de una comunicación con nuestro dispositivo
+[knigth Rider]
+---
+class: middle
+### Proyecto
+Crearemos un proyecto con 2 módulos; uno para móvil y otro para nuestro dispositivo Wear:
+
+- Módulo _mobile_: versión mínima 2.3.3
+- Módulo _wear_: versión mínima 4.4.4.
+---
+class: middle
+### Dependencias
+
+Necesitaremos las siguientes librerías que añadiremos a nuestro archivo gradle en nuestros proyectos:
+
+.center[![dependencias](imgs/dependencias.png)]
+---
+class: middle
+### Wear
+
+Nos centraremos en el dispositivo en primer lugar. Para ello, crearemos una actividad que nos permitirá comunicarnos con el dispositivo.
+
+También crearemos un cliente para ponder conectarnos a la API. por lo que nos crearemos un objeto ```GoogleApiClient```.
+
+```java
+
+this.apiclient = new GoogleApiClient.Builder(this).addConnectionCallbacks(this)
+               .addApi(Wearable.API)
+               .build();
+this.apiclient.connect();
+```
+En este caso hemos añadido la funcionalidad para los Wearable con el método ```addApi()```.
+---
+class: middle
+### Wear
+
+Una vez conectados, podemos mandar un mensaje al nodo conectado(en este caso a nuestro SmartPhone).
+
+```java
+NodeApi.GetConnectedNodesResult rawNodes =
+               Wearable.NodeApi.getConnectedNodes(apiClient).await();
+
+Wearable.MessageApi.sendMessage(apiClient,rawNodes.getNodes().get(0).getId(),path,null);
+```
+
+**Nota**: En este caso solo hay un nodo conectado pero puede darse el caso de que haya más de uno.
 
 ---
+### Mobile
 
-La API _Mirror_ es una **API Web**, la cual nos permite crear _servicios webs_ con el cual podremos enviar información a directamente a las Glass. Su funcionamiento
-es realtivamente sencillo. Nuestro servicio web debía comunicarse con los servidores de Google, pedir persimo para acceder a nuesta cuenta y ya podría enviar «notificaciones» a nuestras gafas.
+Una vez que tenemos lista la comunicación de nuestro SmartWatch, tenemos que pasar a nuestro SmartPhone. En primer lugar, necesitaremos poder recibir los mensajes y conexiones desde nuestro SmartWatch.
+Para ello, usamos el servicio ```WearableListenerService```.
 
-Esta API está bastante limitada y solo nos ofrece un sistema para mostrar información, pero nos permite crear rápidamente una App sencilla que supla algunas necesidades,
-como puede ser mostrar la cartelera de un cine.
+Este servicio, será el encargado de recibir las conexiones desde nuestro SmartpHone y de recibir los mensajes que enviemos.
+```java
+public class KnigthRiderService extends WearableListenerService {
+
+    public APIController controller;
+    public GoogleApiClient gapiClient;
+
+    public KnigthRiderService() {
+        this.controller= new APIController(this);
+
+
+    }
+
+    @Override
+    public void onMessageReceived(MessageEvent messageEvent) {
+       String path=messageEvent.getPath();
+        Toast.makeText(this,"Mensaje Recibido",Toast.LENGTH_SHORT).show();
+        this.controller.ControlKIT(path);
+
+    }
+```
+---
+class: middle
+  Con todo esto ya tenemos lista la comunicación de nuestro Reloj con Nuestro Smartphone y podemos mandar distintos datos a este.
+  Seguidamente vamos a pasar a mostrar el código de la aplicación.
 
 ---
-class: center, middle, inverse
-# GDK
-[La _API Real_ de las Google Glass]
----
+class: middle
+## Referencias:
 
-Las _Glass_ disponen de un Android 4.4 en su interior, y con él, toda la API de Android que ya conocemos. Tanto a nivel de _core_ (servicios, bases de datos, ContentProviders...) como a nivel interfaz gráfico, sin embargo, dado el «diseño» de las _Glass_ y la **ausencia de pantalĺa táctil**, estos elementos no suelen acomodarse del todo.
-
-Por ello, surge un _paquete adicional_ denominado **Glass Development Kit**, un nombre muy épico para un par de bibliotecas que podrían incluirse en el _Support Library_ sin problema.
+- Android Wear: [https://developer.android.com/training/wearables/data-layer/index.html](https://developer.android.com/training/wearables/data-layer/index.html)
+- Repositorio con ejemplos: [https://github.com/zerasul/Hellowear](https://github.com/zerasul/Hellowear)
 
 
-
+.center[![kit](imgs/giphy.gif)]
     </textarea>
     <script src="remark.js" type="text/javascript"></script>
     <script type="text/javascript">
