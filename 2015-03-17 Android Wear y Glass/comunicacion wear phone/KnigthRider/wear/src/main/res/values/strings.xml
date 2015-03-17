@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Knigth Rider</string>
+    <string name="arriba">arriba</string>
+    <string name="abajo">abajo</string>
+    <string name="derecha">derecha</string>
+    <string name="izquierda">izquierda</string>
+    <string name="parar">parar</string>
+    <string name="luces">luces</string>
+</resources>
